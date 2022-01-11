@@ -1,7 +1,7 @@
 <template>
-  <div id="app" class="w-100 h-100 bg-dark">
-    <Header />
-    <Main />
+  <div id="app" class="w-100 vh-100 bg-dark">
+    <Header @sendMovies="getMovies($event)" />
+    <Main :userMovies="moviesToSearch" />
   </div>
 </template>
 
@@ -15,6 +15,18 @@ export default {
     Header,
     Main
   },
+  data: function() {
+    return {
+      // Variabile vuota di default da riempire con l'array dei film dopo la ricerca dell'utente
+      moviesToSearch: null
+    };
+  },
+  methods: {
+    // Funzione per ricevere tramite emit la stringa cercata dall'utente da Header e passarla come prop a Main
+    getMovies: function(filteredMovies){
+      this.moviesToSearch = filteredMovies;
+    }
+  }
 };
 </script>
 

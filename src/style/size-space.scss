@@ -102,25 +102,6 @@
 .bg_cyan{
     background-color: cyan;
 }
-.bg_rainbow{
-    animation: rainbow_bg .5s linear infinite;
-}
-.bg_toxic{
-    animation: toxic_bg 2s linear 1;
-    background-color: darken(lime, 30%);;
-}
-.bg_obsidian{
-    background-image: url('./assets/img/obsidian-bg.jpg');
-}
-.bg_lava{
-    background-image: url('./assets/img/lava-bg.jpg');
-}
-.bg_toxic_level{
-    background-image: url('./assets/img/toxic-bg.jpg');
-}
-.bg_amethyst{
-    background-image: url('./assets/img/amethyst-bg.jpg');
-}
 
 
 /* BORDER */
