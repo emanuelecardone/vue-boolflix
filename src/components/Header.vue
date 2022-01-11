@@ -1,5 +1,5 @@
 <template>
-    <header class="w-100 h_150p d-flex justify-content-center align-items-center">
+    <header class="w-100 h_150p d-flex justify-content-center align-items-center bg-dark">
         <SearchBar :userFilters="filters" class="w-25 me-5" />
         <Button :msg="'Search'" @click.native="showMovies" />
     </header>
@@ -16,6 +16,9 @@ export default {
         SearchBar,
         Button
     },
+    props: {
+        apiUtilities: Object
+    },
     data: function(){
         return {
             filters: {
@@ -27,6 +30,7 @@ export default {
     methods: {
         // Funzione per il display dei film col nome cercato
         showMovies: function(){
+            this.apiUtilities.searchIsDone = true;
 
             // La funzione avviene solo se l'utente non clicca senza inserire almeno un carattere
             if(this.filters.nameFilter !== null){
@@ -43,6 +47,8 @@ export default {
                 .then((response) => {
                     // Emit per mandare ad App l'array di film usciti come risultato
                     this.$emit('sendMovies', response.data.results);
+                    this.apiUtilities.searchIsDone = false;
+                    this.apiUtilities.apiIsReady = true;
                 });
             }
         }

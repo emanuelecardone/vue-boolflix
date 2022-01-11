@@ -1,7 +1,7 @@
 <template>
-  <div id="app" class="w-100 vh-100 bg-dark">
-    <Header @sendMovies="getMovies($event)" />
-    <Main :userMovies="moviesToSearch" />
+  <div id="app" class="w-100">
+    <Header @sendMovies="getMovies($event)" :apiUtilities="apiStatus" />
+    <Main :userMovies="moviesToSearch" :apiLoaded="apiStatus.apiIsReady" :userSearched="apiStatus.searchIsdone" />
   </div>
 </template>
 
@@ -18,7 +18,13 @@ export default {
   data: function() {
     return {
       // Variabile vuota di default da riempire con l'array dei film dopo la ricerca dell'utente
-      moviesToSearch: null
+      moviesToSearch: [],
+      apiStatus: {
+        // Variabile per capire se l'api ha caricato
+        apiIsReady: false,
+        // Variabile per capire se l'utente ha già cercato qualcosa e il server sta rispondendo (per il loader)
+        searchIsDone: false
+      }
     };
   },
   methods: {
