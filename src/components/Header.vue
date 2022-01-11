@@ -23,7 +23,7 @@ export default {
         return {
             filters: {
                 // Stringa contenente la parola cercata dall'utente
-                nameFilter: null
+                nameFilter: ''
             }
         };
     },
@@ -33,7 +33,7 @@ export default {
             this.apiUtilities.searchIsDone = true;
 
             // La funzione avviene solo se l'utente non clicca senza inserire almeno un carattere
-            if(this.filters.nameFilter !== null){
+            if(this.filters.nameFilter.length > 0){
                 axios.get(
                     'https://api.themoviedb.org/3/search/movie',
                     {
@@ -49,6 +49,8 @@ export default {
                     this.$emit('sendMovies', response.data.results);
                     this.apiUtilities.searchIsDone = false;
                     this.apiUtilities.apiIsReady = true;
+                    // Reset testo nella input 
+                    this.filters.nameFilter = ''
                 });
             }
         }
