@@ -28,19 +28,23 @@ export default {
         // Funzione per il display dei film col nome cercato
         showMovies: function(){
 
-            axios.get(
-                'https://api.themoviedb.org/3/search/movie',
-                {
-                    params: {
-                        api_key: 'be363ff2ab5080629cc952123e4f9fd8',
-                        query: this.filters.nameFilter
+            // La funzione avviene solo se l'utente non clicca senza inserire almeno un carattere
+            if(this.filters.nameFilter !== null){
+                axios.get(
+                    'https://api.themoviedb.org/3/search/movie',
+                    {
+                        params: {
+                            api_key: 'be363ff2ab5080629cc952123e4f9fd8',
+                            // La query prende il valore di nameFilter modellato dalla input
+                            query: this.filters.nameFilter
+                        }
                     }
-                }
-            )
-            .then((response) => {
-                console.log(response.data)
-                this.$emit('sendMovies', response.data.results);
-            });
+                )
+                .then((response) => {
+                    // Emit per mandare ad App l'array di film usciti come risultato
+                    this.$emit('sendMovies', response.data.results);
+                });
+            }
         }
     }
 }
