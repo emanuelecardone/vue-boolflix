@@ -6,7 +6,6 @@
 </template>
 
 <script>
-import axios from 'axios';
 import SearchBar from './SearchBar.vue';
 import Button from './Button.vue';
 
@@ -15,9 +14,6 @@ export default {
     components: {
         SearchBar,
         Button
-    },
-    props: {
-        apiUtilities: Object
     },
     data: function(){
         return {
@@ -28,30 +24,12 @@ export default {
         };
     },
     methods: {
-        // Funzione per il display dei film col nome cercato
+        // Funzione per il display dei film col nome cercato (emit per App della stringa inserita dall'utente con tolowercase e trim)
         showMovies: function(){
-            this.apiUtilities.searchIsDone = true;
-
-            // La funzione avviene solo se l'utente non clicca senza inserire almeno un carattere
             if(this.filters.nameFilter.length > 0){
-                axios.get(
-                    'https://api.themoviedb.org/3/search/movie',
-                    {
-                        params: {
-                            api_key: 'be363ff2ab5080629cc952123e4f9fd8',
-                            // La query prende il valore di nameFilter modellato dalla input
-                            query: this.filters.nameFilter
-                        }
-                    }
-                )
-                .then((response) => {
-                    // Emit per mandare ad App l'array di film usciti come risultato
-                    this.$emit('sendMovies', response.data.results);
-                    this.apiUtilities.searchIsDone = false;
-                    this.apiUtilities.apiIsReady = true;
-                    // Reset testo nella input 
-                    this.filters.nameFilter = ''
-                });
+                this.$emit('sendFilter', this.filters.nameFilter.toLowerCase().trim());
+                // Reset testo nella input 
+                this.filters.nameFilter = ''
             }
         }
     }
