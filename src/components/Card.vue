@@ -1,9 +1,9 @@
 <template>
     <div class="element_card text-dark">
-        <span>Title: {{title}}</span>
-        <span>Original title: {{originalTitle}}</span>
-        <span>Language: {{language}}</span>
-        <span>Rate: {{rate}}</span>
+        <span>Title: {{details.title}}</span>
+        <span>Original title: {{details.original_title}}</span>
+        <span>Language: {{details.original_language}}</span>
+        <span>Rate: {{details.vote_average}}</span>
     </div>
 </template>
 
@@ -11,10 +11,7 @@
 export default {
     name: 'Card',
     props: {
-        title: String,
-        originalTitle: String,
-        language: String,
-        rate: Number
+        details: Object
     }
 }
 </script>
