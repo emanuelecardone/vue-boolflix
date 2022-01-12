@@ -14,13 +14,21 @@
             <img v-if="flagOrText === 'flag'" class="w_20p ms-1" :src="require('../assets/img/' + details.original_language + '.png')" :alt="'Bandiera ' + details.original_language">
             <span v-else-if="flagOrText === 'text'" class="ms-1">{{details.original_language}}</span>
         </span>
-        <span>Rate: {{details.vote_average}}</span>
+        <span>Rate: 
+            <RateStar v-for="fullStar,index in stars.full" :key="index" :starClass="'fas'" />
+            <RateStar v-for="emptyStar,index in stars.empty" :key="index" :starClass="'far'" />
+        </span>
     </div>
 </template>
 
 <script>
+import RateStar from './RateStar.vue';
+
 export default {
     name: 'Card',
+    components: {
+        RateStar
+    },
     props: {
         details: Object,
         flags: Array,
@@ -29,7 +37,13 @@ export default {
     data: function(){
         return {
             // Variabile per capire se Language deve stampare un testo o un'immagine
-            flagOrText: null
+            flagOrText: null,
+            // Oggetto per definire quante stelle vuote e quante piene stampare per il voto
+            stars: {
+                tot: 5,
+                full: null,
+                empty: null
+            }
         };
     },
     methods: {
@@ -38,11 +52,21 @@ export default {
         // La variabile è "flag" se l'array delle bandiere include il linguaggio stesso (sono scritte "it" e "fr" come original_language) altrimenti è text    
         defineLanguage: function(){
             this.flagOrText = (this.flags.includes(this.details.original_language)) ? 'flag' : 'text';
+        },
+        // Funzione per stabilire quante stelle piene e vuote stampare per esprimere il voto
+        // Il voto viene diviso per 2, poi arrotondato per eccesso ed ottengo il numero di stelle su 5
+        // A questo punto definisco il numero di stelle piene e vuote
+        defineRate: function(){
+            const fixedRate = Math.ceil(this.details.vote_average / 2);
+            this.stars.full = fixedRate;
+            this.stars.empty = this.stars.tot - this.stars.full;
+            console.log(this.stars)
         }
     },
     created: function(){
-        // Stabilisco flag o testo al created della Card
+        // Stabilisco flag o testo e stelle per il voto al created della Card
         this.defineLanguage();
+        this.defineRate();
     }
 }
 </script>
