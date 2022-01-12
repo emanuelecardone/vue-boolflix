@@ -15,8 +15,7 @@
             <span v-else-if="flagOrText === 'text'" class="ms-1">{{details.original_language}}</span>
         </span>
         <span>Rate: 
-            <RateStar v-for="fullStar,index in stars.full" :key="index" :starClass="'fas'" />
-            <RateStar v-for="emptyStar,index in stars.empty" :key="index" :starClass="'far'" />
+            <RateStar v-for="star,index in stars.tot" :key="index" :class="{'fas': index < stars.full, 'far': index >= stars.full}" />
         </span>
     </div>
 </template>
@@ -60,7 +59,6 @@ export default {
             const fixedRate = Math.ceil(this.details.vote_average / 2);
             this.stars.full = fixedRate;
             this.stars.empty = this.stars.tot - this.stars.full;
-            console.log(this.stars)
         }
     },
     created: function(){

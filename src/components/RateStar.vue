@@ -1,13 +1,10 @@
 <template>
-    <i :class="starClass + ' fa-star'"></i>
+    <i :class="' fa-star'"></i>
 </template>
 
 <script>
 export default {
-    name: 'RateStar',
-    props: {
-        starClass: String
-    }    
+    name: 'RateStar'
 }
 </script>
 
