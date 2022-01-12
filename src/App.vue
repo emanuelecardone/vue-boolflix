@@ -28,9 +28,9 @@ export default {
          // Variabile per capire se Series ha caricato
         seriesAreReady: null,
         // Variabile per capire se l'api intero ha caricato
-        apiIsReady: false,
+        apiIsReady: null,
         // Variabile per capire se l'utente ha già cercato qualcosa e il server sta rispondendo (per il loader)
-        searchIsDone: false
+        searchIsDone: null
       },
       // Array contenente le bandiere
       flags: ['it', 'fr']
@@ -40,6 +40,7 @@ export default {
     // Funzione per ricevere tramite emit la stringa cercata dall'utente da Header e passarla come prop a Main
     getMoviesAndSeries: function(userFilter){
       this.apiStatus.searchIsDone = true;
+      this.apiStatus.apiIsReady = false;
       this.moviesAreReady = false;
       this.seriesAreReady = false;
 
