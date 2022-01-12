@@ -2,14 +2,8 @@
     <div class="element_card text-dark">
         <img v-if="details.poster_path !== null" class="thumbnail" :src="'https://image.tmdb.org/t/p/' + 'w342' + details.poster_path" alt="Copertina">
         <!-- Per distinguere i jason di movies e series viene stampato uno span in base a type contenente uno o l'altro -->
-        <span>Title: 
-            <span v-if="type === 'movie'">{{details.title}}</span>
-            <span v-else-if="type === 'series'">{{details.name}}</span>
-        </span>
-        <span>Original title: 
-            <span v-if="type === 'movie'">{{details.original_title}}</span>
-            <span v-else-if="type === 'series'">{{details.original_name}}</span>
-        </span>
+        <span>Title: {{details.title ? details.title : details.name}}</span>
+        <span>Original title: {{details.original_title ? details.original_title : details.original_name}}</span>
         <span class="language_span d-flex justify-content-center align-items-center">Language:  
             <img v-if="flagOrText === 'flag'" class="w_20p ms-1" :src="require('../assets/img/' + details.original_language + '.png')" :alt="'Bandiera ' + details.original_language">
             <span v-else-if="flagOrText === 'text'" class="ms-1">{{details.original_language}}</span>
@@ -30,8 +24,7 @@ export default {
     },
     props: {
         details: Object,
-        flags: Array,
-        type: String
+        flags: Array
     },
     data: function(){
         return {
