@@ -3,7 +3,7 @@
          stampa il cards wrapper se l'api ha caricato e vi è almeno un elemento
          stampa il loader se l'utente ha inviato una ricerca ma l'api non ha caricato -->
     <main class="w-100 d-flex justify-content-center align-items-center">
-        <h2 v-if="apiStatusCopy.apiIsReady && userMovies.length === 0">We are sorry but there were no results</h2>
+        <h2 v-if="apiStatusCopy.apiIsReady && userMovies.length === 0 && userSeries.length === 0">We are sorry but there were no results</h2>
         <div v-else-if="apiStatusCopy.apiIsReady" class="cards_wrapper w-100 h-100 d-flex flex-column justify-content-center align-items-center">
             <div v-if="userMovies.length > 0" class="movies_wrapper w-100 d-flex flex-column">
                 <h2 class="text-center my-5">Movies:</h2>

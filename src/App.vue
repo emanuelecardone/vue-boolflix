@@ -23,7 +23,11 @@ export default {
       // Variabile vuota di default da riempire con l'array delle serie tv dopo la ricerca dell'utente
       seriesToSearch: [],
       apiStatus: {
-        // Variabile per capire se l'api ha caricato
+        // Variabile per capire se Movies ha caricato
+        moviesAreReady: null,
+         // Variabile per capire se Series ha caricato
+        seriesAreReady: null,
+        // Variabile per capire se l'api intero ha caricato
         apiIsReady: false,
         // Variabile per capire se l'utente ha già cercato qualcosa e il server sta rispondendo (per il loader)
         searchIsDone: false
@@ -36,6 +40,8 @@ export default {
     // Funzione per ricevere tramite emit la stringa cercata dall'utente da Header e passarla come prop a Main
     getMoviesAndSeries: function(userFilter){
       this.apiStatus.searchIsDone = true;
+      this.moviesAreReady = false;
+      this.seriesAreReady = false;
 
       // Chiamata api per i film
       axios.get(
@@ -51,8 +57,11 @@ export default {
       .then((response) => {
         // Salvo l'array ritornato dall'api in moviesToSearch
         this.moviesToSearch = response.data.results;
-        this.apiStatus.searchIsDone = false;
-        this.apiStatus.apiIsReady = true;
+        this.moviesAreReady = true;
+        if(this.seriesAreReady){
+          this.apiStatus.searchIsDone = false;
+          this.apiStatus.apiIsReady = true;
+        }
       });
 
       // Chiamata api per le serie tv
@@ -67,10 +76,13 @@ export default {
         }
       )
       .then((response) => {
-        // Salvo l'array ritornato dall'api in moviesToSearch
+        // Salvo l'array ritornato dall'api in seriesToSearch
         this.seriesToSearch = response.data.results;
-        this.apiStatus.searchIsDone = false;
-        this.apiStatus.apiIsReady = true;
+        this.seriesAreReady = true;
+        if(this.moviesAreReady){
+          this.apiStatus.searchIsDone = false;
+          this.apiStatus.apiIsReady = true;
+        }
       });
     }
   }
