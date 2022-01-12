@@ -1,8 +1,12 @@
 <template>
     <div class="element_card text-dark">
-        <span>Title: {{details.title}}</span>
+        <!-- Per distinguere i jason di movies e series viene stampato uno span in base a type contenente uno o l'altro -->
+        <span>Title: 
+            <span v-if="type === 'movie'">{{details.title}}</span>
+            <span v-else-if="type === 'series'">{{details.name}}</span>
+        </span>
         <span>Original title: 
-            <span v-if="type === 'movies'">{{details.original_title}}</span>
+            <span v-if="type === 'movie'">{{details.original_title}}</span>
             <span v-else-if="type === 'series'">{{details.original_name}}</span>
         </span>
         <span class="language_span d-flex justify-content-center align-items-center">Language:  
