@@ -1,7 +1,10 @@
 <template>
     <div class="element_card text-dark">
         <span>Title: {{details.title}}</span>
-        <span>Original title: {{details.original_title}}</span>
+        <span>Original title: 
+            <span v-if="type === 'movies'">{{details.original_title}}</span>
+            <span v-else-if="type === 'series'">{{details.original_name}}</span>
+        </span>
         <span class="language_span d-flex justify-content-center align-items-center">Language:  
             <img v-if="flagOrText === 'flag'" class="w_20p ms-1" :src="require('../assets/img/' + details.original_language + '.png')" :alt="'Bandiera ' + details.original_language">
             <span v-else-if="flagOrText === 'text'" class="ms-1">{{details.original_language}}</span>
@@ -15,7 +18,8 @@ export default {
     name: 'Card',
     props: {
         details: Object,
-        flags: Array
+        flags: Array,
+        type: String
     },
     data: function(){
         return {
