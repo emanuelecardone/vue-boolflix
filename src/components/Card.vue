@@ -1,5 +1,6 @@
 <template>
     <div class="element_card text-dark">
+        <img class="thumbnail" :src="'https://image.tmdb.org/t/p/' + 'w342' + details.poster_path" alt="Copertina">
         <!-- Per distinguere i jason di movies e series viene stampato uno span in base a type contenente uno o l'altro -->
         <span>Title: 
             <span v-if="type === 'movie'">{{details.title}}</span>
