@@ -1,7 +1,7 @@
 <template>
   <div id="app" class="w-100">
     <Header @sendFilter="getMovies($event)" />
-    <Main :userMovies="moviesToSearch" :apiLoaded="apiStatus.apiIsReady" :userSearched="apiStatus.searchIsdone" />
+    <Main :userMovies="moviesToSearch" :apiStatusCopy="apiStatus" :flagsList="flags" />
   </div>
 </template>
 
@@ -25,7 +25,9 @@ export default {
         apiIsReady: false,
         // Variabile per capire se l'utente ha già cercato qualcosa e il server sta rispondendo (per il loader)
         searchIsDone: false
-      }
+      },
+      // Array contenente le bandiere
+      flags: ['it', 'fr']
     };
   },
   methods: {
