@@ -10,8 +10,8 @@
                 <div class="col">
                     <div class="search_area_wrapper w-100 d-flex justify-content-end align-items-center">
                         <SearchBar :userFilters="filters" />
-                        <SelectBar :arrayToShow="genres.movies" :type="'movies'" />
-                        <SelectBar :arrayToShow="genres.series" :type="'series'" />
+                        <SelectBar :arrayToShow="genres.movies" :IDs="genres.moviesIDs" :type="'movies'" @sendFilter="getFilter($event)" />
+                        <SelectBar :arrayToShow="genres.series" :IDs="genres.seriesIDs" :type="'series'" @sendFilter="getFilter($event)" />
                         <Button :msg="'Search'" @click.native="showMovies" />
                     </div>
                 </div>
@@ -51,6 +51,10 @@ export default {
                 // Reset testo nella input 
                 this.filters.nameFilter = ''
             }
+        },
+        // Funzione per inviare con un altro emit l'id del genere selezionato ad App (in arrivo dall'emit di SelectBar)
+        getFilter: function(genreID, type){
+            this.$emit('sendGenreFilter', genreID, type);
         }
     }
 }

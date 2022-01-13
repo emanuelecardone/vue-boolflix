@@ -10,7 +10,7 @@
                 <div class="container">
                     <h2 class="my-5">Movies:</h2>
                     <div class="row g-5">
-                        <div v-for="movie in userMovies" :key="movie.id" class="col flex-grow-0">
+                        <div v-for="movie in filteringMovies" :key="movie.id" class="col flex-grow-0">
                             <div class="card_wrapper d-flex">
                                 <Card :details="movie" :flags="flagsList" :type="'movie'" />
                             </div>
@@ -22,7 +22,7 @@
                 <div class="container">
                     <h2 class="my-5">TV Series:</h2>
                     <div class="row g-5">
-                        <div v-for="series in userSeries" :key="series.id" class="col flex-grow-0">
+                        <div v-for="series in filteringSeries" :key="series.id" class="col flex-grow-0">
                             <div class="card_wrapper d-flex">
                                 <Card :details="series" :flags="flagsList" :type="'tv'" />
                             </div>
@@ -50,8 +50,33 @@ export default {
         userSeries: Array,
         flagsList: Array,
         searchStarted: Boolean,
-        searchEnded: Boolean
+        searchEnded: Boolean,
+        userFilter: Object
+    },
+    computed: {
+    // Funzione per filtrare l'array di film dopo la ricerca in base al genere selezionato
+    filteringMovies: function(){
+        if(this.userFilter.movies === 'All'){
+            return this.userMovies;
+        }
+        const filteredArray = this.userMovies.filter((movie) => {
+            return movie.genre_ids.includes(this.userFilter.movies);
+        });
+  
+      return filteredArray;
+    },
+    // Funzione per filtrare l'array di serie tv dopo la ricerca in base al genere selezionato
+    filteringSeries: function(){
+        if(this.userFilter.series === 'All'){
+            return this.userSeries;
+        }
+        const filteredArray = this.userSeries.filter((series) => {
+            return series.genre_ids.includes(this.userFilter.series);
+        });
+  
+      return filteredArray;
     }
+  },
 }
 </script>
 

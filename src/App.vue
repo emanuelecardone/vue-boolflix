@@ -1,7 +1,7 @@
 <template>
   <div id="app" class="w-100 d-flex flex-column justify-content-center align-items-center">
-    <Header v-if="allGenresLoaded" @sendFilter="getMoviesAndSeries($event)" :genres="allGenres" />
-    <Main v-if="allGenresLoaded" :userMovies="moviesToSearch" :userSeries="seriesToSearch" :flagsList="flags" :searchStarted="searchOn" :searchEnded="searchOff" />
+    <Header v-if="allGenresLoaded" @sendFilter="getMoviesAndSeries($event)" @sendGenreFilter="getGenreFilter($event)" :genres="allGenres" />
+    <Main v-if="allGenresLoaded" :userMovies="moviesToSearch" :userSeries="seriesToSearch" :flagsList="flags" :searchStarted="searchOn" :searchEnded="searchOff" :userFilter="filters" />
     <Loader v-else />
   </div>
 </template>
@@ -34,7 +34,9 @@ export default {
       // Oggetto contenente tutti i generi possibili per film e movie (sono 2 chiamate separate)
       allGenres: {
         movies: [],
-        series: []
+        moviesIDs: [],
+        series: [],
+        seriesIDs: []
       },
       // Array vuoto di default da riempire con l'array dei film dopo la ricerca dell'utente
       moviesToSearch: [],
@@ -43,7 +45,12 @@ export default {
       // Variabile con la key dell'api
       apiKey: 'be363ff2ab5080629cc952123e4f9fd8',
       // Array contenente le bandiere
-      flags: ['it', 'fr']
+      flags: ['it', 'fr'],
+      // Oggetto contenente i generi scelti dall'utente per filtrare (hanno 'All' di default)
+      filters: {
+        movies: 'All',
+        series: 'All'
+      }
     };
   },
   methods: {
@@ -118,6 +125,7 @@ export default {
         // forEach sulla risposta in modo da pushare nell'array allGenres.movies solo il nome del genere
         response.data.genres.forEach((genre) => {
           this.allGenres.movies.push(genre.name);
+          this.allGenres.moviesIDs.push(genre.id);
         });
         // Variabile loader
         if(this.allGenres.series.length > 0){
@@ -138,12 +146,17 @@ export default {
         // forEach sulla risposta in modo da pushare nell'array allGenres.series solo il nome del genere
         response.data.genres.forEach((genre) => {
           this.allGenres.series.push(genre.name);
+          this.allGenres.seriesIDs.push(genre.id);
         });
         // Variabile loader
         if(this.allGenres.movies.length > 0){
           this.allGenresLoaded = true;
         }
       });
+    },
+    // Funzione per salvare in una variabile il genere selezionato
+    getGenreFilter: function(filterObject){
+      filterObject.arrayType === 'movies' ? this.filters.movies = filterObject.id : this.filters.series = filterObject.id;
     }
   },
   created: function(){
