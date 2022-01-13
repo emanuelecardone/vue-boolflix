@@ -28,6 +28,9 @@ export default {
         SearchBar,
         Button
     },
+    props: {
+        genres: Object
+    },
     data: function(){
         return {
             filters: {

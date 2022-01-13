@@ -1,7 +1,8 @@
 <template>
-  <div id="app" class="w-100">
-    <Header @sendFilter="getMoviesAndSeries($event)" />
-    <Main :userMovies="moviesToSearch" :userSeries="seriesToSearch" :moviesCast="cast.movies" :seriesCast="cast.series" :moviesGenres="genres.movies" :seriesGenres="genres.series" :flagsList="flags" :searchStarted="userSearched" />
+  <div id="app" class="w-100 d-flex flex-column justify-content-center align-items-center">
+    <Header v-if="genresLoaded" @sendFilter="getMoviesAndSeries($event)" :genres="allGenres" />
+    <Main v-if="genresLoaded" :userMovies="moviesToSearch" :userSeries="seriesToSearch" :moviesCast="cast.movies" :seriesCast="cast.series" :moviesGenres="genres.movies" :seriesGenres="genres.series" :flagsList="flags" :searchStarted="userSearched" />
+    <Loader v-else />
   </div>
 </template>
 
@@ -9,17 +10,26 @@
 import axios from 'axios';
 import Header from './components/Header.vue';
 import Main from './components/Main.vue';
+import Loader from './components/Loader.vue';
 
 export default {
   name: "App",
   components: {
     Header,
-    Main
+    Main,
+    Loader
   },
   data: function() {
     return {
       // Variabile per capire se l'utente ha già cercato qualcosa
       userSearched: false,
+      // Variabile per capire se i 2 array con tutti i generi possibili sono stati caricati
+      genresLoaded: false,
+      // Oggetto contenente tutti i generi possibili per film e movie (sono 2 chiamate separate)
+      allGenres: {
+        movies: [],
+        series: []
+      },
       // Array vuoto di default da riempire con l'array dei film dopo la ricerca dell'utente
       moviesToSearch: [],
       // Array vuoto di default da riempire con l'array delle serie tv dopo la ricerca dell'utente
@@ -140,7 +150,53 @@ export default {
           type === 'movie' ? this.genres.movies.push(theseGenres) : this.genres.series.push(theseGenres);
         });
       });
+    },
+    // Funzione per ricevere l'array di generi possibili per film e serie tv (sono 2 chiamate separate)
+    getAllGenres: function(){
+      // Generi per i film
+      axios.get(
+        'https://api.themoviedb.org/3/genre/movie/list',
+        {
+          params: {
+            api_key: this.apiKey
+          }
+        }
+      )
+      .then((response) => {
+        // forEach sulla risposta in modo da pushare nell'array allGenres.movies solo il nome del genere
+        response.data.genres.forEach((genre) => {
+          this.allGenres.movies.push(genre.name);
+        });
+        // Variabile loader
+        if(this.allGenres.series.length > 0){
+          this.genresLoaded = true;
+        }
+      });
+
+      // Generi per le serie
+      axios.get(
+        'https://api.themoviedb.org/3/genre/tv/list',
+        {
+          params: {
+            api_key: this.apiKey
+          }
+        }
+      )
+      .then((response) => {
+        // forEach sulla risposta in modo da pushare nell'array allGenres.series solo il nome del genere
+        response.data.genres.forEach((genre) => {
+          this.allGenres.series.push(genre.name);
+        });
+        // Variabile loader
+        if(this.allGenres.movies.length > 0){
+          this.genresLoaded = true;
+        }
+      });
     }
+  },
+  created: function(){
+    // Richiamo la funzione per avere gli array con tutti i generi possibili per film e serie tv
+    this.getAllGenres();
   }
 };
 </script>
@@ -152,4 +208,8 @@ export default {
 @import './style/size-space.scss';
 @import './style/utilities.scss';
 
+  /* Per far vedere il Loader al centro della pagina */
+  #app{
+    min-height: 100vh;
+  }
 </style>
