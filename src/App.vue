@@ -92,9 +92,9 @@ export default {
         // Salvo l'array ritornato dall'api in seriesToSearch
         this.seriesToSearch = response.data.results;
         // Richiamo la funzione per ricevere il cast della serie dall'api
-        this.getCast(this.seriesToSearch, 'series');
+        this.getCast(this.seriesToSearch, 'tv');
         // Richiamo la funzione per ricevere i generi della serie dall'api
-        this.getGenres(this.seriesToSearch, 'series');
+        this.getGenres(this.seriesToSearch, 'tv');
       });
     },
     // Funzione per ricevere il cast del film/serie con un max di 5 attori
@@ -104,7 +104,7 @@ export default {
         const thisCast = [];
         // Chiamata api per ricevere il cast del film/serie corrente
         axios.get(
-          'https://api.themoviedb.org/3/movie/' + movieOrSeries.id + '/credits',
+          'https://api.themoviedb.org/3/' + type + '/' + movieOrSeries.id + '/credits',
           {
             params: {
               api_key: this.apiKey
@@ -115,7 +115,7 @@ export default {
           // La risposta dell'api è un array in cui ogni oggetto contiene le info sull'attore, a me serve solo name
           // Ho bisogno quindi di fare un altro forEach sulla risposta dell'api, così da pushare name in thisCast
           response.data.cast.forEach((actor,index) => {
-            if(index < 5 && response.status === 200){
+            if(index < 5){
               thisCast.push(actor.name);
             }
           });
@@ -131,7 +131,7 @@ export default {
         const theseGenres = [];
         // Chiamata api per ricevere i generi del film/serie corrente
         axios.get(
-          'https://api.themoviedb.org/3/movie/' + movieOrSeries.id,
+          'https://api.themoviedb.org/3/' + type + '/' + movieOrSeries.id,
           {
             params: {
               api_key: this.apiKey
@@ -142,9 +142,7 @@ export default {
           // La risposta dell'api è un array in cui ogni oggetto contiene le info principali del film/serie
           // Ho bisogno quindi di fare un altro forEach sulla risposta dell'api, così da pushare genres.name in thisCast
           response.data.genres.forEach((genre) => {
-            if(response.status === 200){
-              theseGenres.push(genre.name);
-            }
+            theseGenres.push(genre.name);
           });
           // Adesso posso theseGenres thisCast nell'array principale, type mi aiuta a capire dove pushare
           type === 'movie' ? this.genres.movies.push(theseGenres) : this.genres.series.push(theseGenres);
