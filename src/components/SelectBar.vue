@@ -1,4 +1,6 @@
 <template>
+    <!-- La SelectBar viene richiamata sia per mostrare tutti i generi di film che di serie tv, ha la prima opzione All per entrambe
+    Il value di ogni option (a parte All) è l'id del genere, in modo da consentire il filtro con genre_ids dell'api -->
     <select v-model="genreID" @change="switchFilter">
         <option value="All">{{type === 'movies' ? 'All Movies' : 'All Series' }}</option>
         <option v-for="genre,index in arrayToShow" :key="index" :value="IDs[index]">{{genre}}</option>

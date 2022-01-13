@@ -1,4 +1,5 @@
 <template>
+    <!-- Il loader viene richiamato dove l'api non ha ancora caricato (ha una scritta loading e un cerchio che gira) -->
     <div class="loader w-100 h-100 d-flex flex-column justify-content-center align-items-center">
         <h3>Loading</h3>
         <div class="loading_circle w_30p h_30p"></div>

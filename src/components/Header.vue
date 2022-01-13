@@ -1,4 +1,5 @@
 <template>
+    <!-- L'header è disposto in un container Bootstrap ed è diviso in 2 cols, a sinistra il logo a destra tutta l'area search per i vari filtri -->
     <header class="w-100 h_150p d-flex align-items-center">
         <div class="container">
             <div class="row row-cols-2">

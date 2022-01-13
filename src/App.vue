@@ -1,4 +1,5 @@
 <template>
+  <!-- App gestisce i compiti principali della pagina tra cui: creazione array dopo la ricerca, filtro per genere, valuta il v-if del Loader -->
   <div id="app" class="w-100 d-flex flex-column justify-content-center align-items-center">
     <Header v-if="allGenresLoaded" @sendFilter="getMoviesAndSeries($event)" @sendGenreFilter="getGenreFilter($event)" :genres="allGenres" />
     <Main v-if="allGenresLoaded" :userMovies="moviesToSearch" :userSeries="seriesToSearch" :flagsList="flags" :searchStarted="searchOn" :searchEnded="searchOff" />
@@ -167,24 +168,28 @@ export default {
   computed: {
     // Funzione per filtrare l'array di film dopo la ricerca in base al genere selezionato
     filteringMovies: function(){
+      // Caso All, non vi è alcun filtro e torna l'array originale
       if(this.filters.movies === 'All'){
           return this.moviesToSearch;
       }
+      // Se non è All, allora eseguo un filter sull'array salvandolo in un array filtrato, che ritorno a fine funzione
       const filteredArray = this.moviesToSearch.filter((movie) => {
         return movie.genre_ids.includes(this.filters.movies);
       });
-      
+      // Return
       return filteredArray;
     },
     // Funzione per filtrare l'array di serie tv dopo la ricerca in base al genere selezionato
     filteringSeries: function(){
+      // Caso All, non vi è alcun filtro e torna l'array originale
       if(this.filters.series === 'All'){
         return this.seriesToSearch;
       }
+      // Se non è All, allora eseguo un filter sull'array salvandolo in un array filtrato, che ritorno a fine funzione
       const filteredArray = this.seriesToSearch.filter((series) => {
         return series.genre_ids.includes(this.filters.series);
       });
-    
+      // Return
       return filteredArray;
     }
   },

@@ -2,7 +2,8 @@
     <!-- La card mostra la copertina se la src non è null, altrimenti una specie di alt con il titolo del film/serie dato in h2
     La sezione info non ha il d-none ma il v-if se si verifica il mouseenter, se invece si verifica il mouseleave si toglie il v-if
     L'overview a volte è una stringa vuota, in quel caso viene stampato uno span con scritto "Not available"
-    Anche il cast e genere hanno lo stesso span di overview in quanto non vi è un cast/genere per tutti i film/serie tv ma alcuni ritornano status 404 -->
+    Anche il cast e genere hanno lo stesso span di overview in quanto non vi è un cast/genere per tutti i film/serie tv
+    Il cast e i generi del film/serie della card vengono creati al mouseenter tramite chiamata axios -->
     <div @mouseenter="handleHover('enter')" @mouseleave="handleHover('leave')" class="element_card position-relative">
         <img v-if="details.poster_path !== null" class="thumbnail" :src="'https://image.tmdb.org/t/p/' + 'w342' + details.poster_path" alt="Copertina">
         <div v-else class="img_alt h-100 d-flex justify-content-center align-items-center">
