@@ -1,7 +1,20 @@
 <template>
-    <header class="w-100 h_150p d-flex justify-content-center align-items-center bg-dark">
-        <SearchBar :userFilters="filters" class="w-25 me-5" />
-        <Button :msg="'Search'" @click.native="showMovies" />
+    <header class="w-100 h_150p d-flex align-items-center">
+        <div class="container">
+            <div class="row row-cols-2">
+                <div class="col">
+                    <div class="logo_wrapper">
+                        <h3 class="logo_title text_red text-uppercase mb-0">boolflix</h3>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="search_area_wrapper w-100 d-flex justify-content-end align-items-center">
+                        <SearchBar :userFilters="filters" class="w-50" />
+                        <Button :msg="'Search'" @click.native="showMovies" />
+                    </div>
+                </div>
+            </div>
+        </div>  
     </header>
 </template>
 
@@ -37,5 +50,13 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+@import '../style/variables.scss';
 
+    header{
+        background-color: $tertiary_color;
+
+        .search_area_wrapper{
+            gap: 1rem;
+        }
+    }
 </style>

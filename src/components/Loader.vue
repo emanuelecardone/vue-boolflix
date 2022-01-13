@@ -12,8 +12,14 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+@import '../style/variables.scss';
+
+    .loader{
+        color: $primary_color;
+    }
+
     .loading_circle{
-        border: 5px solid black;
+        border: 3px solid $primary_color;
         border-top-color: transparent;
         border-radius: 50%;
         animation: loading .5s linear infinite;
