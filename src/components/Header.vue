@@ -9,7 +9,9 @@
                 </div>
                 <div class="col">
                     <div class="search_area_wrapper w-100 d-flex justify-content-end align-items-center">
-                        <SearchBar :userFilters="filters" class="w-50" />
+                        <SearchBar :userFilters="filters" />
+                        <SelectBar :arrayToShow="genres.movies" :type="'movies'" />
+                        <SelectBar :arrayToShow="genres.series" :type="'series'" />
                         <Button :msg="'Search'" @click.native="showMovies" />
                     </div>
                 </div>
@@ -20,12 +22,14 @@
 
 <script>
 import SearchBar from './SearchBar.vue';
+import SelectBar from './SelectBar.vue';
 import Button from './Button.vue';
 
 export default {
     name: 'Header',
     components: {
         SearchBar,
+        SelectBar,
         Button
     },
     props: {
