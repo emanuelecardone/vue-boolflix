@@ -37,14 +37,14 @@
                 <li>
                     <strong>Cast:</strong>
                     <div v-if="moreInfo.cast.length > 0" class="actors d-inline">
-                        <span v-for="actor,index in moreInfo.cast" :key="index">{{actor}},</span>
+                        <span v-for="actor,index in moreInfo.cast" :key="index" class="ms-2">{{actor}}</span>
                     </div>
                     <span v-else>Not available</span>
                 </li>
                 <li>
                     <strong>Genres:</strong>
                     <div v-if="moreInfo.genres.length > 0" class="genres d-inline">
-                        <span v-for="genre,index in moreInfo.genres" :key="index">{{genre}},</span>
+                        <span v-for="genre,index in moreInfo.genres" :key="index" class="ms-2">{{genre}}</span>
                     </div>
                     <span v-else>Not available</span>
                 </li>

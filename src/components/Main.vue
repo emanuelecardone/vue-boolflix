@@ -4,7 +4,8 @@
          stampa il loader se l'utente ha inviato una ricerca ma l'api non ha caricato entrambi gli array
          Il flex grow 0 sulle col è per fixare la disposizione dell'ultima riga -->
     <main class="w-100 d-flex justify-content-center align-items-center">
-        <h2 v-if="searchEnded && userMovies.length === 0 && userSeries.length === 0">We are sorry but there were no results</h2>
+        <h2 v-if="!searchStarted && !searchEnded">Welcome, get started by searching a movie or tv series (you can also pick a genre)</h2>
+        <h2 v-else-if="searchEnded && userMovies.length === 0 && userSeries.length === 0">We are sorry but there were no results</h2>
         <div v-else-if="searchEnded" class="cards_wrapper w-100 h-100 d-flex flex-column justify-content-center align-items-center">
             <div v-if="userMovies.length > 0" class="movies_wrapper w-100">
                 <div class="container">
