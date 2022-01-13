@@ -1,7 +1,7 @@
 <template>
   <div id="app" class="w-100 d-flex flex-column justify-content-center align-items-center">
     <Header v-if="allGenresLoaded" @sendFilter="getMoviesAndSeries($event)" @sendGenreFilter="getGenreFilter($event)" :genres="allGenres" />
-    <Main v-if="allGenresLoaded" :userMovies="moviesToSearch" :userSeries="seriesToSearch" :flagsList="flags" :searchStarted="searchOn" :searchEnded="searchOff" :userFilter="filters" />
+    <Main v-if="allGenresLoaded" :userMovies="moviesToSearch" :userSeries="seriesToSearch" :flagsList="flags" :searchStarted="searchOn" :searchEnded="searchOff" />
     <Loader v-else />
   </div>
 </template>
@@ -79,6 +79,8 @@ export default {
       .then((response) => {
         // Salvo l'array ritornato dall'api in moviesToSearch
         this.moviesToSearch = response.data.results;
+        // Filtro l'array
+        this.moviesToSearch = this.filteringMovies;
         // Il load di movies diventa true e, se anche quello di series è true, allora la ricerca completa è finita
         this.moviesLoaded = true;
         if(this.seriesLoaded){
@@ -101,6 +103,8 @@ export default {
       .then((response) => {
         // Salvo l'array ritornato dall'api in seriesToSearch
         this.seriesToSearch = response.data.results;
+        // Filtro l'array
+        this.seriesToSearch = this.filteringSeries;
         // Il load di series diventa true e, se anche quello di movies è true, allora la ricerca completa è finita
         this.seriesLoaded = true;
         if(this.moviesLoaded){
@@ -157,6 +161,31 @@ export default {
     // Funzione per salvare in una variabile il genere selezionato
     getGenreFilter: function(filterObject){
       filterObject.arrayType === 'movies' ? this.filters.movies = filterObject.id : this.filters.series = filterObject.id;
+    }
+  
+  },
+  computed: {
+    // Funzione per filtrare l'array di film dopo la ricerca in base al genere selezionato
+    filteringMovies: function(){
+      if(this.filters.movies === 'All'){
+          return this.moviesToSearch;
+      }
+      const filteredArray = this.moviesToSearch.filter((movie) => {
+        return movie.genre_ids.includes(this.filters.movies);
+      });
+      
+      return filteredArray;
+    },
+    // Funzione per filtrare l'array di serie tv dopo la ricerca in base al genere selezionato
+    filteringSeries: function(){
+      if(this.filters.series === 'All'){
+        return this.seriesToSearch;
+      }
+      const filteredArray = this.seriesToSearch.filter((series) => {
+        return series.genre_ids.includes(this.filters.series);
+      });
+    
+      return filteredArray;
     }
   },
   created: function(){
