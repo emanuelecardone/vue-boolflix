@@ -36,15 +36,15 @@
                 </li>
                 <li>
                     <strong>Cast:</strong>
-                    <div v-if="cast.length > 0" class="actors d-inline">
-                        <span v-for="actor,index in cast" :key="index">{{actor}},</span>
+                    <div v-if="moreInfo.cast.length > 0" class="actors d-inline">
+                        <span v-for="actor,index in moreInfo.cast" :key="index">{{actor}},</span>
                     </div>
                     <span v-else>Not available</span>
                 </li>
                 <li>
                     <strong>Genres:</strong>
-                    <div v-if="genres.length > 0" class="genres d-inline">
-                        <span v-for="genre,index in genres" :key="index">{{genre}},</span>
+                    <div v-if="moreInfo.genres.length > 0" class="genres d-inline">
+                        <span v-for="genre,index in moreInfo.genres" :key="index">{{genre}},</span>
                     </div>
                     <span v-else>Not available</span>
                 </li>
@@ -55,6 +55,7 @@
 
 <script>
 import RateStar from './RateStar.vue';
+import axios from 'axios';
 
 export default {
     name: 'Card',
@@ -63,9 +64,8 @@ export default {
     },
     props: {
         details: Object,
-        cast: Array,
-        genres: Array,
-        flags: Array
+        flags: Array,
+        type: String
     },
     data: function(){
         return {
@@ -78,7 +78,14 @@ export default {
                 empty: null
             },
             // Variabile per gestire mouseenter e mouseleave
-            userHover: false
+            userHover: false,
+            // Oggetto contenente cast e genere del film/serie attuale
+            moreInfo: {
+                cast: [],
+                genres: []
+            },
+            // Key per l'api
+            apiKey: 'be363ff2ab5080629cc952123e4f9fd8'
         };
     },
     methods: {
@@ -97,9 +104,62 @@ export default {
             this.stars.empty = this.stars.tot - this.stars.full;
         },
         // Funzione per stampare la sezione infos al mouseenter e toglierla al mouseleave
+        // La funzione fa la chiamata api per cast e genere del film/serie attuale
         handleHover: function(enterOrLeave){
             this.userHover = (enterOrLeave === 'enter') ? true : false;
-        }
+            if(enterOrLeave === 'enter'){
+                this.type === 'movie' ? this.getCast(this.details.id, 'movie') : this.getCast(this.details.id, 'tv');
+                this.type === 'movie' ? this.getGenres(this.details.id, 'movie') : this.getGenres(this.details.id, 'tv');
+            }
+        },
+        // Funzione per ricevere il cast del film/serie con un max di 5 attori
+        getCast: function(movieOrSeriesID, type){
+            // Creo un array vuoto che riempirò con un max di 5 attori
+            const thisCast = [];
+            // Chiamata api per ricevere il cast del film/serie corrente
+            axios.get(
+                'https://api.themoviedb.org/3/' + type + '/' + movieOrSeriesID + '/credits',
+                {
+                    params: {
+                        api_key: this.apiKey
+                    }
+                }
+            )
+            .then((response) => {
+                // La risposta dell'api è un array in cui ogni oggetto contiene le info sull'attore, a me serve solo name
+                // Ho bisogno quindi di fare un altro forEach sulla risposta dell'api, così da pushare name in thisCast
+                response.data.cast.forEach((actor,index) => {
+                    if(index < 5){
+                        thisCast.push(actor.name);
+                    }
+                });
+                // Adesso posso eguagliare moreInfos.cast a thisCast
+                this.moreInfo.cast = thisCast;
+            });
+        },
+        // Funzione per ricevere i generi del film/serie con un max di 5 attori
+        getGenres: function(movieOrSeriesID, type){
+            // Creo un array vuoto che riempirò con i generi relativi, poi lo pusho in genres.movies o genres.series che saranno quindi matrici
+            const theseGenres = [];
+            // Chiamata api per ricevere i generi del film/serie corrente
+            axios.get(
+                'https://api.themoviedb.org/3/' + type + '/' + movieOrSeriesID,
+                {
+                    params: {
+                        api_key: this.apiKey
+                    }
+                }
+            )
+            .then((response) => {
+                // La risposta dell'api è un array in cui ogni oggetto contiene le info principali del film/serie
+                // Ho bisogno quindi di fare un altro forEach sulla risposta dell'api, così da pushare genres.name in theseGenres
+                response.data.genres.forEach((genre) => {
+                    theseGenres.push(genre.name);
+                });
+                 // Adesso posso eguagliare moreInfos.genres a theseGenres
+                this.moreInfo.genres = theseGenres;
+            });
+        },
     },
     created: function(){
         // Stabilisco flag o testo e stelle per il voto al created della Card
